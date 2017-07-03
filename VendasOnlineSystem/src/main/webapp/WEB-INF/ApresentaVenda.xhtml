@@ -1,0 +1,84 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core">
+    <h:head>
+        <title>Vendas efetuadas</title>
+    </h:head>
+    <h:body>
+        <ui:include src="menu.xhtml"/>
+        <p:growl id="gro2" life="4000"/>
+        <h:form id="ApresentacaoVendaform">
+            <p:dataTable id="tabelaVenda" value="#{controladorVenda.recuperarTodosVenda()}"
+                         paginator="true" rows="5" selectionMode="single"
+                         rowKey="#{item.idVenda}">
+                <f:facet name="header"> Vendas Cadastrados: </f:facet>
+                <p:column headerText="Nome do cliente">
+                    <h:outputText value="#{item.nomeCliente}"/>
+                </p:column>
+                <p:column headerText="Id do produto">
+                    <h:outputText value="#{item.idProduto}"/>
+                </p:column>
+                 <p:column headerText="Preço do produto">
+                    <h:outputText value="#{item.precoProduto}"/>
+                </p:column>
+                 <p:column headerText="Quantidade">
+                    <h:outputText value="#{item.quantidade}"/>
+                </p:column>
+                 <p:column headerText="Valor total">
+                    <h:outputText value="#{item.valorTotal}"/>
+                </p:column>
+
+                <p:column headerText="Operações" style="width: 10%">
+                    <p:commandButton icon="ui-icon-search" oncomplete="PF('painelVisualiza').show()"
+                                     update="ApresentacaoVendaform">
+                        <f:setPropertyActionListener value="#{item}" target="#{controladorVenda.selectedVenda()}"/>
+                    </p:commandButton>
+                    <p:commandButton icon="ui-icon-pencil" action="AlteraVenda.xml">
+                        <f:setPropertyActionListener value="#{item}" target="#{controladorVenda.selectedVenda()}"/>
+                    </p:commandButton>
+                    <p:commandButton icon="ui-icon-closethick" oncomplete="PF('painelConfirma').show()">
+                        <f:setPropertyActionListener value="#{item}" target="#{controladorVenda.selectedProduto()}"/>
+                    </p:commandButton>
+                </p:column>
+            </p:dataTable>
+            
+             <p:dialog id="dialVisualiza" visible="false" resizable="false" modal="true"
+                      widgetVar="painelVisualiza">
+
+                <p:panelGrid columns="5">
+                    <h:outputText value="Nome do cliente:"/>
+                    <h:outputText value="#{controladorVenda.selectedVenda.nomeCliente}"/> 
+
+                    <h:outputText value="Id do produto:"/>
+                    <h:outputText value="#{controladorVenda.selectedVenda.idProduto}"/> 
+
+                    <h:outputText value="Preço do produto:"/>
+                    <h:outputText value="#{controladorProduto.selectedProduto.precoProduto}"/>
+                    
+                    <h:outputText value="Quantidade:"/>
+                    <h:outputText value="#{controladorVenda.selectedVenda.quantidade}"/> 
+                    
+                    <h:outputText value="Valor total:"/>
+                    <h:outputText value="#{controladorVenda.selectedVenda.valorTotal}"/> 
+
+                </p:panelGrid>
+
+                <p:commandButton value="fechar" oncomplete="PF('painelVisualiza').hide()"/>
+            </p:dialog>
+
+
+            <p:confirmDialog message="Deseja deletar o registro?" id="confirdial"
+                             visible="false" widgetVar="painelConfirma">
+                <p:commandButton value="sim" action="#{controladorVenda.apagar(controladorVenda.selectedVenda)}"
+                                 oncomplete="PF('painelConfirma').hide()" update=":gro2 tabelaVenda"/>
+                <p:commandButton value="não"/>
+            </p:confirmDialog>
+
+</h:form>
+</h:body>
+</html>
+
