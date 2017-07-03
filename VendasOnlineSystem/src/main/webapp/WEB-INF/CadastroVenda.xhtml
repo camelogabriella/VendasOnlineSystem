@@ -1,0 +1,59 @@
+
+<?xml version="1.0" encoding="UTF-8"?>
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:h="http://xmlns.jcp.org/jsf/html"
+      xmlns:p="http://primefaces.org/ui"
+      xmlns:f="http://xmlns.jcp.org/jsf/core"    
+      xmlns:ui="http://xmlns.jcp.org/jsf/facelets">
+    <h:head>
+        <title>Cadastre sua venda aqui:</title>
+    </h:head>
+    <h:body>
+        <br></br>
+        <ui:include src='menu.xhtml'/>
+        <p:messages/>
+        <h:form id="CadastroVendaform">
+            <p:fieldset legend="Cadastro de venda" style="width: 50%">
+                <p:panelGrid columns="3">
+                    <h:outputText value="Nome do cliente:"/>
+                    <p:inputText id="nomeCliente" value="#{builderCliente.nomeCliente}" required="true" requiredMessage="Este campo é obrigatório"/>
+                    <p:message for="nomeCliente"/>
+                    
+                    <h:outputText value="Data da venda:"/>
+                    <p:inputText id="dataVenda" value="#{builderVenda.dataVenda}" required="=true" requiredMessage="Este campo é obrigatório"/>
+                    <p:message for="dataVenda"/>
+
+                    <h:outputText value="Id do produto:"/>
+                    <p:inputText id="idProduto" value="#{builderProduto.idProduto}" required="=true" requiredMessage="Este campo é obrigatório"/>
+                    <p:message for="idProduto"/>
+                    
+                    <h:outputText value="Quantidade:"/>
+                    <p:inputText id="quantidade" value="#{builderVenda.quantidade}" required="=true" requiredMessage="Este campo é obrigatório"/>
+                    <p:message for="quantidade"/>
+                    
+                    <h:outputText value="Valor total:"/>
+                    <p:inputText id="valorTotal" value="#{builderVenda.valorTotal}" required="=true" requiredMessage="Este campo é obrigatório"/>
+                    <p:message for="valorTotal"/>
+
+                </p:panelGrid>
+                <p:commandButton value="Cadastrar" oncomplete="PF('painel').show()"/>
+            </p:fieldset>
+
+            <p:dialog id="diall" resizable="false" modal="true" widgetVar="painel" header="Atenção">
+                <h:outputText value="Você tem certeza que quer cadastrar essa venda?"/>
+                <f:facet name="footer">
+                    <p:commandButton value="sim" 
+                                     action="#{controladorVenda.inserir(builderVenda.construir())}"
+                                     update="CadastroVendaform"
+                                     oncomplete="PF('painel').hide()" process="@this"/>
+
+
+                    <p:commandButton value="não" onclick="PF('painel').hide()"/>
+                </f:facet>
+            </p:dialog>
+
+        </h:form>
+        
+    </h:body>
+</html>
+
